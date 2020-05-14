@@ -18,6 +18,12 @@ public class Main {
 		
 		Scanner stdin = new Scanner(System.in);
 		
+		
+		
+		System.out.println("NEW CONTENTTTTT");
+		
+		
+		
 		// initialize variables
 		ArrayList<Pet> pets = new ArrayList<Pet>();
 		int selection;
