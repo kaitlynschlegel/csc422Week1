@@ -24,6 +24,9 @@ public class Main {
 		String name = "";
 		int age = 0;
 		boolean cont = true;
+		String searchName;
+		int searchAge;
+		int counter;
 		
 		System.out.println("Pet Database Program.");
 		
@@ -32,7 +35,9 @@ public class Main {
 			System.out.println("\nWhat would you like to do?");
 			System.out.println("1) View all pets");
 			System.out.println("2) Add more pets");
-			System.out.println("3) Exit program");
+			System.out.println("3) Search for pets by name");
+			System.out.println("4) Search for pets by age");
+			System.out.println("5) Exit program");
 			selection = stdin.nextInt();
 			
 			// do whatever the user selected
@@ -54,6 +59,7 @@ public class Main {
 				}
 				// table footer
 				System.out.println("+----------------------+");
+				System.out.println(pets.size() + " rows in set.");
 				break;
 			case 2:
 				while (true) {
@@ -70,10 +76,62 @@ public class Main {
 				}
 				break;
 			case 3:
+				counter = 0;
+				System.out.print("Enter a name to search: ");
+				searchName = stdin.next();
+				// table header
+				System.out.println("+----------------------+");
+				System.out.println("| ID | NAME      | AGE |");
+				System.out.println("+----------------------+");
+				for (Pet pet : pets) {					
+					if (pet.getName().equals(searchName)) {
+						// increase the counter to know how many rows will be in this table
+						counter++;
+						// table body with data
+						System.out.print("| ");
+						System.out.printf("%2s", pets.indexOf(pet));
+						System.out.print(" | ");
+						System.out.printf("%-9s", pet.getName());
+						System.out.print(" | ");
+						System.out.printf("%3s", pet.getAge());
+						System.out.print(" |\n");
+					}
+				}
+				// table footer
+				System.out.println("+----------------------+");
+				System.out.println(counter + " rows in set.");
+				break;
+			case 4:
+				counter = 0;
+				System.out.print("Enter an age to search: ");
+				searchAge = stdin.nextInt();
+				// table header
+				System.out.println("+----------------------+");
+				System.out.println("| ID | NAME      | AGE |");
+				System.out.println("+----------------------+");
+				for (Pet pet : pets) {					
+					if (pet.getAge() == searchAge) {
+						// increase the counter to know how many rows will be in this table
+						counter++;
+						// table body with data
+						System.out.print("| ");
+						System.out.printf("%2s", pets.indexOf(pet));
+						System.out.print(" | ");
+						System.out.printf("%-9s", pet.getName());
+						System.out.print(" | ");
+						System.out.printf("%3s", pet.getAge());
+						System.out.print(" |\n");
+					}
+				}
+				// table footer
+				System.out.println("+----------------------+");
+				System.out.println(counter + " rows in set.");
+				break;
+			case 5:
 				System.out.println("Goodbye!");
 				System.exit(0);
 			default:
-				System.out.println("Please enter a number 1-3");
+				System.out.println("Please enter a number 1-5");
 			}
 		}
 	}
