@@ -1,16 +1,19 @@
 /* 
  * Kaitlyn Schlegel
  * CSC 422 Software Engineering
- * Week 1 Assignment 1 Part 2
+ * Week 2 Assignment 2 Part 2
  * May 14, 2020
+ * Revisions:
+ * 		May 22, 2020: added save/load and error handling
  * 
  * This program will allow a user to enter pets into the database, update pets, search for pets, and display all pets
  */
 
 package csc422Week1;
 
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.*;
 
 public class Main {
 
@@ -29,6 +32,23 @@ public class Main {
 		String oldName;
 		int oldAge;
 		
+		
+		/*
+		 * Saving and loading the file was written with the help of:
+		 * https://samderlust.com/dev-blog/java/write-read-arraylist-object-file-java
+		*/
+		
+		// load the pets from the petList.ser file
+		try {
+			FileInputStream fis = new FileInputStream("petList.ser");
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			pets = (ArrayList<Pet>) ois.readObject();
+			ois.close();
+		} catch (Exception e) {
+			// do nothing.
+			// the program will create the file at the end
+		}
+		
 		System.out.println("Pet Database Program.");
 		
 		// continue displaying the menu after each selection until the user chooses to exit
@@ -36,11 +56,14 @@ public class Main {
 			System.out.println("\nWhat would you like to do?");
 			System.out.println("1) View all pets");
 			System.out.println("2) Add more pets");
+			System.out.println("3) Remove an existing pet");
+			System.out.println("4) Exit program\n");
+		/* remove these options because they are not needed for week 2
 			System.out.println("3) Update an existing pet");
 			System.out.println("4) Remove an existing pet");
 			System.out.println("5) Search for pets by name");
 			System.out.println("6) Search for pets by age");
-			System.out.println("7) Exit program\n");
+		*/
 			System.out.print("Your selection: ");
 			selection = stdin.nextInt();
 			
@@ -62,8 +85,14 @@ public class Main {
 					pet.setName(name);
 					pet.setAge(age);
 					pets.add(pet);
+					if (pets.size() >= 5) {
+						System.out.print("Database is full. You may not add more pets.\n");
+						break;
+					}
 				}
 				break;
+				
+			/* remove these options as they are not needed for week 2
 			case 3: // update a pet
 				// display all pets
 				displayTable(pets);
@@ -82,7 +111,9 @@ public class Main {
 				pets.get(id).setAge(age);
 				System.out.print(oldName + " " + oldAge + " changed to " + pets.get(id).getName() + " " + pets.get(id).getAge() + ".\n");
 				break;
-			case 4: // remove a pet
+			*/
+				
+			case 3: // remove a pet
 				displayTable(pets);
 				System.out.print("Enter the pet ID to remove: ");
 				// get the pet to remove from the user
@@ -94,11 +125,12 @@ public class Main {
 				pets.remove(id);
 				System.out.print(oldName + " " + oldAge + " is removed.\n");
 				break;
-
+				
+			/* remove these options as they are not needed for week 2
 			case 5: // search pets by name
 				counter = 0;
 				System.out.print("Enter a name to search: ");
-				name = stdin.next();
+				name = (stdin.next()).toLowerCase();
 				// table header
 				System.out.println("+----------------------+");
 				System.out.println("| ID | NAME      | AGE |");
@@ -147,10 +179,14 @@ public class Main {
 				System.out.println("+----------------------+");
 				System.out.println(counter + " rows in set.");
 				break;
-			case 7: // exit program
+			*/
+			case 4: // exit program
 				System.out.println("Goodbye!");
 				// close the scanner
 				stdin.close();
+				// save the pets to the petList.ser file
+				save(pets);
+				// close the program;
 				System.exit(0);
 			default:
 				System.out.println("Please enter a number 1-7");
@@ -158,6 +194,7 @@ public class Main {
 		} // end while that keeps the program running
 	} // end main method
 
+	
 	public static void displayTable(ArrayList<Pet> pets) {
 		// table header
 		System.out.println("+----------------------+");
@@ -176,5 +213,21 @@ public class Main {
 		// table footer
 		System.out.println("+----------------------+");
 		System.out.println(pets.size() + " rows in set.\n");
+	} // end displayTable()
+	
+	/*
+	 * Saving and loading the file was written with the help of:
+	 * https://samderlust.com/dev-blog/java/write-read-arraylist-object-file-java
+	*/
+	public static void save(ArrayList<Pet> pets) {
+		try {
+			FileOutputStream fos = new FileOutputStream("petList.ser");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(pets);
+			oos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
+	
 } // end Main class

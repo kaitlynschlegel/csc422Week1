@@ -1,6 +1,8 @@
 package csc422Week1;
 
-public class Pet {
+import java.io.Serializable;
+
+public class Pet implements Serializable{
 
 	public String getName() {
 		return name;
