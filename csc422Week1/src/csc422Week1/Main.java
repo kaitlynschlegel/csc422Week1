@@ -31,6 +31,7 @@ public class Main {
 		int counter;
 		String oldName;
 		int oldAge;
+		boolean ageCont = true;
 		
 		
 		/*
@@ -81,10 +82,22 @@ public class Main {
 						break;
 					}
 					age = stdin.nextInt();
+					// make sure the age is between 1 and 20
+					while (ageCont == true) {
+						if (age < 1 || age > 20) {
+							System.out.println("Age must be between 1 and 20");
+							System.out.print("Please enter " + name + "'s age: ");
+							age = stdin.nextInt();
+						} else {
+							ageCont = false;
+						}
+					}
+					// add the new pet to the array
 					Pet pet = new Pet();
 					pet.setName(name);
 					pet.setAge(age);
 					pets.add(pet);
+					// don't allow more than 5 pets to be in the array
 					if (pets.size() >= 5) {
 						System.out.print("Database is full. You may not add more pets.\n");
 						break;
@@ -114,16 +127,21 @@ public class Main {
 			*/
 				
 			case 3: // remove a pet
-				displayTable(pets);
-				System.out.print("Enter the pet ID to remove: ");
-				// get the pet to remove from the user
-				id = stdin.nextInt();
-				// save the old information to use in the print statement later
-				oldName = pets.get(id).getName();
-				oldAge = pets.get(id).getAge();
-				// remove the pet
-				pets.remove(id);
-				System.out.print(oldName + " " + oldAge + " is removed.\n");
+				try {
+					displayTable(pets);
+					System.out.print("Enter the pet ID to remove: ");
+					// get the pet to remove from the user
+					id = stdin.nextInt();
+					// save the old information to use in the print statement later
+					oldName = pets.get(id).getName();
+					oldAge = pets.get(id).getAge();
+					// remove the pet
+					pets.remove(id);
+					System.out.print(oldName + " " + oldAge + " is removed.\n");
+				} catch (IndexOutOfBoundsException e) {
+					System.out.println("You must enter a valid pet ID.");
+					System.out.println("Valid pet IDs: 0-" + (pets.size()-1));
+				}
 				break;
 				
 			/* remove these options as they are not needed for week 2
